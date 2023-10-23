@@ -13,4 +13,39 @@ class AnagramTests {
             words.size
         )
     }
+
+    // playing with a single word
+    @Test
+    fun `anagrms of cat`() {
+        val input = "CAT"
+        val anagrams = words
+            .filter {
+                it.length == 3
+            }
+            .filter {
+                it.hasSameLettersAs(input)
+            }
+
+        assertEquals(
+            listOf(
+                "ACT",
+                "CAT",
+            ),
+            anagrams,
+        )
+    }
+}
+
+private fun String.hasSameLettersAs(
+    other: String,
+): Boolean {
+    return this
+        .toCharArray()
+        .sortedArray()
+        .contentEquals(
+            other
+            .toCharArray()
+            .sortedArray()
+        )
+
 }
