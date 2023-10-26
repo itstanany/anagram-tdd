@@ -123,6 +123,18 @@ class AnagramTests {
         )
     }
 
+    @Test
+    fun `anagrams For REFACTORING`() {
+        val input = "REFACTORING"
+        assertEquals(
+            setOf(
+                "A ACT",
+                "A CAT",
+                "ACTA",
+            ),
+            words.anagramsFor(input),
+        )
+    }
 //    @Test
 //    fun `anagrams for ANAGRAM`(approver: Approver) {
 //        approver.assertApproved(
@@ -140,7 +152,7 @@ class AnagramTests {
 fun List<String>.anagramsFor(input: String): Set<String> {
     val result: MutableList<String> = mutableListOf<String>()
     process(
-        input,
+        input.replace(" ", ""),
         this,
         { result.add(it) },
     )
