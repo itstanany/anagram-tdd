@@ -169,6 +169,7 @@ private fun process(
     val candidateWords = words.filter {
         it.couldBeMadeFromLettersIn(input)
     }
+    val remainingCandidates = candidateWords.toMutableList()
 //        println("_words ${_words.toString()}")
     candidateWords
         .forEach { word ->
@@ -179,7 +180,7 @@ private fun process(
 
                 process(
                     remainingLetters,
-                    candidateWords,
+                    remainingCandidates,
                     collector,
                     prefix = "$prefix $word",
                     )
@@ -192,6 +193,7 @@ private fun process(
                                                println("word--no-remaining-letters: $word")
                                            }*/
             }
+            remainingCandidates.remove(word)
         }
 }
 
