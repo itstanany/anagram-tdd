@@ -1,4 +1,7 @@
+import com.oneeyedmen.okeydoke.Approver
+import com.oneeyedmen.okeydoke.junit5.ApprovalsExtension
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -16,6 +19,7 @@ val words = File("./scrabble.txt")
     )
     .sorted()
 
+//@ExtendWith(ApprovalsExtension::class)
 class AnagramTests {
     @Test
     fun `load words`() {
@@ -95,7 +99,7 @@ class AnagramTests {
     }
 
     @Test
-    fun anagramsFor() {
+    fun `anagrams For A CAT`() {
         val input = "A CAT"
         assertEquals(
             setOf(
@@ -106,6 +110,31 @@ class AnagramTests {
             words.anagramsFor(input),
         )
     }
+//    @Test
+//    fun `anagrams For ANAGRAM`() {
+//        val input = "ANAGRAM"
+//        assertEquals(
+//            setOf(
+//                "A ACT",
+//                "A CAT",
+//                "ACTA",
+//            ),
+//            words.anagramsFor(input),
+//        )
+//    }
+
+    @Test
+    fun `anagrams for ANAGRAM`(approver: Approver) {
+        approver.assertApproved(
+            words.anagramsFor("ANAGRAM").joinToString("\n")
+        )
+    }
+
+//    companion object {
+//        @RegisterExtension
+//        @JvmField
+//        val approvals = ApprovalsExtension("src/test/kotlin")
+//    }
 }
 
 fun List<String>.anagramsFor(input: String): Set<String> {
@@ -115,8 +144,7 @@ fun List<String>.anagramsFor(input: String): Set<String> {
         this,
         { result.add(it) },
     )
-    val deDuplicated: Set<String> = result.map { it.split(" ").sorted().joinToString(" ") }.toSet()
-    return deDuplicated
+    return result.map { it.split(" ").sorted().joinToString(" ") }.toSet()
 }
 
 private fun process(
@@ -141,7 +169,7 @@ private fun process(
                     remainingLetters,
                     words,
                     collector,
-                    prefix = "  $word",
+                    prefix = "$prefix $word",
                     )
             } else {
                 collector("$prefix $word".trim())
