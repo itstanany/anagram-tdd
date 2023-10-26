@@ -99,7 +99,7 @@ class AnagramTests {
     fun `anagrams For A CAT`() {
         val input = "A CAT"
         assertEquals(
-            setOf(
+            listOf(
                 "A ACT",
                 "A CAT",
                 "ACTA",
@@ -111,7 +111,7 @@ class AnagramTests {
     fun `anagrams For ANAGRAM`() {
         val input = "ANAGRAM"
         assertEquals(
-            setOf(
+            listOf(
                 "A ACT",
                 "A CAT",
                 "ACTA",
@@ -124,7 +124,7 @@ class AnagramTests {
     fun `anagrams For REFACTORING`() {
         val input = "REFACTORING"
         assertEquals(
-            setOf(
+            listOf(
                 "A ACT",
                 "A CAT",
                 "ACTA",
@@ -136,7 +136,7 @@ class AnagramTests {
     fun `anagrams For REFACTORING TO KOTLIN depth 3`() {
         val input = "REFACTORING TO KOTLIN"
         assertEquals(
-            setOf(
+            listOf(
                 "A ACT",
                 "A CAT",
                 "ACTA",
@@ -161,7 +161,7 @@ class AnagramTests {
 //    }
 }
 
-fun List<String>.anagramsFor(input: String, depth: Int = Int.MAX_VALUE): Set<String> {
+fun List<String>.anagramsFor(input: String, depth: Int = Int.MAX_VALUE): List<String> {
     val result: MutableList<String> = mutableListOf<String>()
     process(
         input.replace(" ", ""),
@@ -169,7 +169,7 @@ fun List<String>.anagramsFor(input: String, depth: Int = Int.MAX_VALUE): Set<Str
         { result.add(it) },
         depth = depth,
     )
-    return result.map { it.split(" ").sorted().joinToString(" ") }.toSet()
+    return result
 }
 
 private fun process(
