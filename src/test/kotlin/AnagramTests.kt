@@ -1,7 +1,4 @@
-import com.oneeyedmen.okeydoke.Approver
-import com.oneeyedmen.okeydoke.junit5.ApprovalsExtension
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 import java.io.File
 import kotlin.test.assertEquals
 import kotlin.test.assertFalse
@@ -107,7 +104,7 @@ class AnagramTests {
                 "A CAT",
                 "ACTA",
             ),
-            words.anagramsFor(input),
+            words.anagramsFor(input, Int.MAX_VALUE),
         )
     }
     @Test
@@ -119,7 +116,7 @@ class AnagramTests {
                 "A CAT",
                 "ACTA",
             ),
-            words.anagramsFor(input),
+            words.anagramsFor(input, Int.MAX_VALUE),
         )
     }
 
@@ -132,7 +129,22 @@ class AnagramTests {
                 "A CAT",
                 "ACTA",
             ),
-            words.anagramsFor(input),
+            words.anagramsFor(input, Int.MAX_VALUE),
+        )
+    }
+    @Test
+    fun `anagrams For REFACTORING TO KOTLIN depth 3`() {
+        val input = "REFACTORING TO KOTLIN"
+        assertEquals(
+            setOf(
+                "A ACT",
+                "A CAT",
+                "ACTA",
+            ),
+            words.anagramsFor(
+                input,
+                depth = 3,
+                ),
         )
     }
 //    @Test
@@ -149,12 +161,13 @@ class AnagramTests {
 //    }
 }
 
-fun List<String>.anagramsFor(input: String): Set<String> {
+fun List<String>.anagramsFor(input: String, depth: Int = Int.MAX_VALUE): Set<String> {
     val result: MutableList<String> = mutableListOf<String>()
     process(
         input.replace(" ", ""),
         this,
         { result.add(it) },
+        depth = depth,
     )
     return result.map { it.split(" ").sorted().joinToString(" ") }.toSet()
 }
@@ -163,8 +176,9 @@ private fun process(
     input: String,
     words: List<String>,
     collector: (String) -> Unit,
-    prefix: String = ""
-    ) {
+    prefix: String = "",
+    depth: Int
+) {
     // get all candidates
     val candidateWords = words.filter {
         it.couldBeMadeFromLettersIn(input)
@@ -177,13 +191,15 @@ private fun process(
             if (remainingLetters.isNotBlank()) {
 //                println("word: $word,, remaining letters: [$remainingLetters]")
 //                println("$prefix $word [$remainingLetters]")
-
-                process(
-                    remainingLetters,
-                    remainingCandidates,
-                    collector,
-                    prefix = "$prefix $word",
+                if(depth > 1) {
+                    process(
+                        remainingLetters,
+                        remainingCandidates,
+                        collector,
+                        prefix = "$prefix $word",
+                        depth - 1,
                     )
+                }
             } else {
                 collector("$prefix $word".trim())
 //                println("$prefix $word")
