@@ -110,25 +110,25 @@ class AnagramTests {
             words.anagramsFor(input),
         )
     }
-//    @Test
-//    fun `anagrams For ANAGRAM`() {
-//        val input = "ANAGRAM"
-//        assertEquals(
-//            setOf(
-//                "A ACT",
-//                "A CAT",
-//                "ACTA",
-//            ),
-//            words.anagramsFor(input),
-//        )
-//    }
-
     @Test
-    fun `anagrams for ANAGRAM`(approver: Approver) {
-        approver.assertApproved(
-            words.anagramsFor("ANAGRAM").joinToString("\n")
+    fun `anagrams For ANAGRAM`() {
+        val input = "ANAGRAM"
+        assertEquals(
+            setOf(
+                "A ACT",
+                "A CAT",
+                "ACTA",
+            ),
+            words.anagramsFor(input),
         )
     }
+
+//    @Test
+//    fun `anagrams for ANAGRAM`(approver: Approver) {
+//        approver.assertApproved(
+//            words.anagramsFor("ANAGRAM").joinToString("\n")
+//        )
+//    }
 
 //    companion object {
 //        @RegisterExtension
@@ -154,11 +154,11 @@ private fun process(
     prefix: String = ""
     ) {
     // get all candidates
-    val _words = words.filter {
+    val candidateWords = words.filter {
         it.couldBeMadeFromLettersIn(input)
     }
 //        println("_words ${_words.toString()}")
-            _words
+    candidateWords
         .forEach { word ->
             val remainingLetters = input.minusLettersIn(word)
             if (remainingLetters.isNotBlank()) {
@@ -167,7 +167,7 @@ private fun process(
 
                 process(
                     remainingLetters,
-                    words,
+                    candidateWords,
                     collector,
                     prefix = "$prefix $word",
                     )
@@ -192,6 +192,8 @@ private fun String.minusLettersIn(word: String): String {
 }
 
 private fun String.couldBeMadeFromLettersIn(letters: String): Boolean {
+    if(this.length > letters.length)
+        return false
     val lettersList = letters.toMutableList()
 // test presence of letters by looping
 //    removing chars guarantee testing letter repetition
